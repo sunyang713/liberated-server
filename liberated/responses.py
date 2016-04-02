@@ -1,5 +1,6 @@
 from flask import request, render_template, g, redirect, Response
 from liberated import app
+from database import get_users
 
 #
 # @app.route is a decorator around index() that means:
@@ -39,6 +40,12 @@ def index():
     context = dict(data = names)
 
     return render_template('index.html', **context)
+
+
+@app.route('/users')
+def users():
+    users = get_users()
+    return render_template('users.html', users = users)
 
 
 @app.route('/another')
