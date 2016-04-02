@@ -3,7 +3,7 @@ from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, g, Response
 import yaml
-from liberated.engine import engine
+from liberated.configureEngine import configureEngine
 # from make_json_app import make_json_app
 # app = make_json_app(__name__)
 # tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -11,7 +11,7 @@ from liberated.engine import engine
 app = Flask(__name__.split('.')[0])
 import liberated.responses
 
-
+engine = configureEngine()
 #
 # Example of running queries in your database
 # Note that this will probably not work if you already have a table named 'test' in your database,
