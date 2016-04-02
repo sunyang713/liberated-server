@@ -12,4 +12,4 @@ def configureEngine():
 	DATABASEURI = 'postgresql://{user}:{password}@w4111a.eastus.cloudapp.azure.com/proj1part2'.format(user=USERNAME, password=PASSWORD)
 
 	# create a database engine connected to the URI above.
-	return create_engine(DATABASEURI)
+	return create_engine(DATABASEURI, convert_unicode=True)
