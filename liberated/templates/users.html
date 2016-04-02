@@ -1,0 +1,32 @@
+<html>
+<body>
+  <p>
+    <ul>
+      <li>
+        <a href="/">Home</a>
+      </li>
+    </ul>
+
+    <h3>User Dump</h3>
+    <div>{{ users }}</div>
+
+    <div>
+      <h3>User Table</h3>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Level</th>
+        </tr>
+        {% for user in users %}
+          <tr>
+            <td>{{ user['name'] }}</td>
+            <td>{{ user['gender'] }}</td>
+            <td>{{ user['level'] }}</td>
+          <tr>
+        {% endfor %}
+    </div>
+
+  </body>
+
+</html>
