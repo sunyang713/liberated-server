@@ -31,4 +31,19 @@ def get_users():
 
     return users
 
+def insert_user(first_name, last_name, email_addr, gender, user_level):
+    print type(first_name)
+    cursor = g.conn.execute(
+        """
+        INSERT INTO users (first_name, last_name, email_addr, gender, user_level)
+            VALUES ('{first_name}', '{last_name}', '{email_addr}', '{gender}', '{user_level}');
+        """
+        .format(
+            first_name = first_name,
+            last_name = last_name,
+            email_addr = email_addr,
+            gender = gender,
+            user_level = user_level
+        )
+    )
 
