@@ -67,3 +67,5 @@ target/
 # OSX
 .DS_Store
 
+# Secrets
+.config.yml

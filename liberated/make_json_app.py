@@ -5,7 +5,7 @@ from werkzeug.exceptions import HTTPException
 __all__ = ['make_json_app']
 
 def make_json_app(import_name, **kwargs):
-    '''
+    """
     Creates a JSON-oriented Flask app.
 
     All error responses that you don't specifically
@@ -13,7 +13,7 @@ def make_json_app(import_name, **kwargs):
     type, and will contain JSON like this (just an example):
 
     { "message": "405: Method Not Allowed" }
-    '''
+    """
     def make_json_error(ex):
         response = jsonify(
             code = ex.code,
