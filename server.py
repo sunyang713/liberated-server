@@ -19,7 +19,7 @@ Read about it online.
 """
 
 import click
-from liberated import app, tmpl_dir
+from liberated import app
 
 if __name__ == '__main__':
 

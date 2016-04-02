@@ -29,9 +29,7 @@ def index():
     # DEBUG: this is debugging code to see what request looks like
     # print request.args
 
-    #
-    # example of a database query
-    #
+    # a database query
     cursor = g.conn.execute('SELECT name FROM test')
     names = []
     for result in cursor:
@@ -71,6 +69,7 @@ def index():
     # for example, the below file reads template/index.html
     #
     return render_template('index.html', **context)
+
 
 #
 # This is an example of a different path.  You can see it at:

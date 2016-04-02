@@ -1,4 +1,3 @@
-#!/usr/bin/env Ruby
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 

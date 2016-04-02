@@ -3,27 +3,14 @@ from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, g, Response
 import yaml
+from liberated.engine import engine
 # from make_json_app import make_json_app
 # app = make_json_app(__name__)
-
-
-with open('.config.yml', 'r') as f:
-    config = yaml.load(f)
-
-USERNAME = config['username']
-PASSWORD = config['password']
-
-tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-app = Flask(__name__.split('.')[0], template_folder=tmpl_dir) # @1st-param: from flask docs b/c this is a package now.
-
+# tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+# app = Flask(__name__.split('.')[0], template_folder=tmpl_dir) # @1st-param: from flask docs b/c this is a package now.
+app = Flask(__name__.split('.')[0])
 import liberated.responses
 
-# URI of our database.
-DATABASEURI = 'postgresql://{user}:{password}@w4111a.eastus.cloudapp.azure.com/proj1part2'.format(user=USERNAME, password=PASSWORD)
-
-
-# create a database engine connected to the URI above.
-engine = create_engine(DATABASEURI)
 
 #
 # Example of running queries in your database
