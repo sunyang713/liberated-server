@@ -1,7 +1,7 @@
 import yaml
 from sqlalchemy import create_engine
 
-def configureEngine():
+def configure_engine():
 	with open('.config.yml', 'r') as f:
 	    config = yaml.load(f)
 

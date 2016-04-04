@@ -1,20 +1,18 @@
 # from make_json_app import make_json_app
 # app = make_json_app(__name__)
-# tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-# app = Flask(__name__.split('.')[0], template_folder=tmpl_dir)
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-import yaml
 
-
+# Flask imports - create <app> instance.
 from flask import Flask, g, Response
 app = Flask(__name__.split('.')[0])
 import liberated.responses
 
 
-from liberated.configureEngine import configureEngine
-engine = configureEngine()
+# Create the database connection engine.
+from liberated.configure_engine import configure_engine
+engine = configure_engine()
 
 
 @app.before_request
