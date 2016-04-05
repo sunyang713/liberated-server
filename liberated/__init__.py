@@ -1,17 +1,12 @@
-# from make_json_app import make_json_app
+from make_json_app import make_json_app
 # app = make_json_app(__name__)
 import os
+from flask import Flask, g, Response
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-
-# Flask imports - create <app> instance.
-from flask import Flask, g, Response
-app = Flask(__name__.split('.')[0])
-import liberated.responses
-
-
-# Create the database connection engine.
 from liberated.configure_engine import configure_engine
+
+app = make_json_app(__name__.split('.')[0])
 engine = configure_engine()
 
 
@@ -19,7 +14,6 @@ engine = configure_engine()
 def before_request():
     """
     At the beginning of every web request, setup a database connection.
-
     The variable g is globally accessible.
     """
     try:
@@ -40,3 +34,6 @@ def teardown_request(exception):
         g.conn.close()
     except Exception as e:
         pass
+
+import liberated.responses
+
