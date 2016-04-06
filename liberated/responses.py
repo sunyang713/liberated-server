@@ -1,6 +1,6 @@
 from flask import Response, abort, g, redirect, render_template, request
-from liberated import app
 from database import get_users, insert_user
+from liberated import app
 
 @app.route('/')
 def index():
@@ -36,6 +36,6 @@ def add():
 
 @app.route('/login')
 def login():
-    abort(401)
+    abort(501)
     this_is_never_executed()
 

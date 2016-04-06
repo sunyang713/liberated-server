@@ -1,10 +1,10 @@
-from make_json_app import make_json_app
-# app = make_json_app(__name__)
 import os
 from flask import Flask, g, Response
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from liberated.configure_engine import configure_engine
+from make_json_app import make_json_app
+
 
 app = make_json_app(__name__.split('.')[0])
 engine = configure_engine()
@@ -35,5 +35,5 @@ def teardown_request(exception):
     except Exception as e:
         pass
 
-import liberated.responses
 
+import liberated.responses
