@@ -1,5 +1,5 @@
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user
+from database import get_users, insert_user, get_attends
 from liberated import app
 
 @app.route('/')
@@ -23,6 +23,12 @@ def add_user():
 @app.route('/another')
 def another():
     return render_template('another.html')
+
+
+@app.route('/attends')
+def attends():
+    attends = get_attends()
+    return render_template('attends.html', attends = attends)
 
 
 # Example of adding new data to the database

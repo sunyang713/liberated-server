@@ -39,3 +39,20 @@ def insert_user(first_name, last_name, email_addr, gender, user_level):
         )
     )
 
+# def get_attends(first_name, last_name, start, end):
+def get_attends():    
+    cursor = g.conn.execute('SELECT * FROM attends')
+    attends = []
+    for item in cursor:
+        #print item['first_name'], item['start_time'], item['end_time']
+        attends.append({
+            'first_name': item['first_name'],
+            'last_name': item['last_name'],
+            #'start': item['start_time'],
+            #'end': item['end_time'],
+            'class_type': item['class_type']
+        })
+    cursor.close()
+    print attends
+    return attends
+
