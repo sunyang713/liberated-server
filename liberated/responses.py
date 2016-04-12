@@ -1,6 +1,7 @@
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user, get_attends
+from database import get_users, insert_user, get_attends, get_workouts, insert_workout
 from liberated import app
+# import pdb
 
 @app.route('/')
 def index():
@@ -30,6 +31,19 @@ def attends():
     attends = get_attends()
     return render_template('attends.html', attends = attends)
 
+
+@app.route('/workouts')
+def workouts():
+    workouts = get_workouts()
+    return render_template('workouts.html', workouts = workouts)
+
+
+@app.route('/add_workout', methods=['POST'])
+def add_workout():
+    data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
+    print data
+    insert_workout(**data)
+    return redirect('/workouts')
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
