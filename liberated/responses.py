@@ -1,16 +1,18 @@
+from calendar import Calendar
+from datetime import date
 from flask import Response, abort, g, redirect, render_template, request
 from database import get_users, insert_user
 from liberated import app
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 
 @app.route('/users')
 def users():
     users = get_users()
-    return render_template('users.html', users = users)
+    return render_template('users.jinja', users = users)
 
 
 @app.route('/add_user', methods=['POST'])
@@ -22,7 +24,7 @@ def add_user():
 
 @app.route('/another')
 def another():
-    return render_template('another.html')
+    return render_template('another.jinja')
 
 
 # Example of adding new data to the database
