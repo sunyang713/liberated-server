@@ -1,4 +1,4 @@
-from calendar import Calendar
+from html_calendar import HTML_Calendar
 from datetime import date
 from flask import Response, abort, g, redirect, render_template, request
 from database import get_users, insert_user
@@ -36,8 +36,18 @@ def add():
     return redirect('/')
 
 
+@app.route('/calendar', defaults={'year': date.today().year, 'month': date.today().month})
+@app.route('/calendar/<int:year>/<int:month>')
+def calendar(year, month):
+    calendar = HTML_Calendar(6) # specify first weekday; 6 corresponds to Sunday.
+    return render_template('calendar.jinja', calendar=calendar.formatmonth(year, month))
+
+
+
 @app.route('/login')
 def login():
     abort(501)
     this_is_never_executed()
+
+
 

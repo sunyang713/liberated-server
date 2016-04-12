@@ -26,10 +26,9 @@ def teardown_request(exception):
     """
     Close the database connection at the end of the request.
     """
-    try:
-        g.conn.close()
-    except Exception as e:
-        pass
+    db = getattr(g, 'conn', None)
+    if db is not None:
+        db.close()
 
 # Import route responses.
 import liberated.responses
