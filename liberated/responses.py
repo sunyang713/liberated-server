@@ -36,11 +36,12 @@ def add():
     return redirect('/')
 
 
-@app.route('/calendar', defaults={'year': date.today().year, 'month': date.today().month})
+@app.route('/calendar', defaults={'year': date.today().year, 'month': date.today().month, 'test': date.today().day})
 @app.route('/calendar/<int:year>/<int:month>')
-def calendar(year, month):
+@app.route('/calendar/<int:test>', defaults={'year': date.today().year, 'month': date.today().month})
+def calendar(year, month, test):
     calendar = HTML_Calendar(6) # specify first weekday; 6 corresponds to Sunday.
-    return render_template('calendar.jinja', calendar=calendar.formatmonth(year, month))
+    return render_template('calendar.jinja', calendar=calendar.formatmonth(year, month), test=test)
 
 
 
