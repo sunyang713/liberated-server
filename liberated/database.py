@@ -212,7 +212,7 @@ def get_performance(first_name, last_name, w_name):
     for werk in cursor:
         print werk
         score.append(werk['score'])
-        date.append(str(werk['w_date']))
+        date.append(werk['w_date'])
 
     cursor.close()
 

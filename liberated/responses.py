@@ -1,6 +1,5 @@
 from datetime import date, datetime
 from flask import Response, abort, g, redirect, render_template, request
-import numpy as np
 
 from liberated import app
 from calendars import HTML_Calendar, AttendanceCalendar
@@ -61,10 +60,12 @@ def performance():
     workouts = get_workouts()
 
     if not request.args:
+        performance_message = 'No user selected'
         return render_template(
             'performance.jinja',
             users=users,
-            workouts=workouts
+            workouts=workouts,
+            performance_message=performance_message
         )
 
     user = request.args.get('user')
@@ -76,21 +77,29 @@ def performance():
     ## Get query params from form / buttons
     scores, dates = get_performance(first_name, last_name, workout)
 
-    dd = np.array(dates, dtype=np.datetime64)
-
-    print dd
-
     plot = figure(plot_width=600, plot_height=500, x_axis_type="datetime")
-    plot.circle(dates, scores, line_width=2)
+
+    if scores and len(scores) > 1:
+        plot.line(dates, scores, line_width=2)
+    elif scores:
+        plot.circle(dates, scores)
+
+    if scores:
+        script, div = embed.components(plot)
+        performance_message = ''
+    else:
+        script = None
+        div = None
+        performance_message = 'No performance data for %s with %s' % (first_name, workout)
 
 
-    script, div = embed.components(plot)
     return render_template(
         'performance.jinja',
         script=script,
         div=div,
         users=users,
-        workouts=workouts
+        workouts=workouts,
+        performance_message=performance_message
     )
 
 

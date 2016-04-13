@@ -45,6 +45,10 @@
   <h6 class="docs-header">Performance</h6>
   {{ div | safe }}
 </div>
+{% else %}
+<div class="docs-section">
+  <h6 class="docs-header">{{ performance_message }}</h6>
+</div>
 {% endif %}
 
 {% endblock %}
