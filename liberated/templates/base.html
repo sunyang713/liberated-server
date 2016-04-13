@@ -31,6 +31,9 @@
     <!-- Favicon
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    {% block headers %}
+    {% endblock %}
+
 
   </head>
 
@@ -52,6 +55,7 @@
             <li class="navbar-item"><a class="navbar-link" href="/attends">Attends</a></li>
             <li class="navbar-item"><a class="navbar-link" href="/workouts">Workouts</a></li>
             <li class="navbar-item"><a class="navbar-link" href="/leaderboard">Most Liberated</a></li>
+            <li class="navbar-item"><a class="navbar-link" href="/performance">Performance</a></li>
           </ul>
         </div>
       </nav>

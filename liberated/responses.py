@@ -1,6 +1,9 @@
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user, get_attends, get_workouts, insert_workout, get_leaderboard
+from database import get_users, insert_user, get_attends, get_workouts, insert_workout, get_leaderboard, get_performance
 from liberated import app
+from bokeh.plotting import figure
+from bokeh.resources import CDN
+from bokeh import embed
 import pdb
 
 @app.route('/')
@@ -50,6 +53,24 @@ def leaderboard():
         women, men = get_leaderboard(**data)
 
     return render_template('leaderboard.html', women = women, men = men)
+
+@app.route('/performance') 
+#@app.route('/plot/<color>')
+def performance():
+
+    ## Get query params from form / buttons
+    data = get_performance
+
+    ## This is just a toy
+    plot = figure(plot_width=600, plot_height=500)
+
+    # add a line renderer
+    plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    script, div = embed.components(plot)
+    print script
+    print div
+
+    return render_template('performance.html', script=script, div=div)
 
 
 # Example of adding new data to the database
