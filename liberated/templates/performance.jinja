@@ -1,18 +1,54 @@
 {% extends "base.jinja" %}
 
 {% block headers %}
+  {% if script %}
     <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.css" type="text/css" />
     <script type="text/javascript" src="http://cdn.pydata.org/bokeh/release/bokeh-0.11.1.min.js"></script>
     {{ script | safe }}
+  {% endif %}
 {% endblock %}
 
 
 {% block content %}
 
-    <div class="docs-section">
-      <h6 class="docs-header">Performance</h6>
-      {{ div | safe }}
+<div class="docs-section">
+  <h6 class="docs-header">Select User & Workout</h6>
+  <form action="/performance" method="GET">
+    <div class="row">
+      <div class="six columns">
+        <label for="user">User</label>
+        <select class="u-full-width" name="user" id="user">
+          {% for user in users %}
+            <option value="{{ user['name'] + ' ' + user['last_name'] }}">
+              {{ user['name'] + ' ' + user['last_name'] }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="six columns">
+        <label for="workout">Workout</label>
+        <select class="u-full-width" name="workout" id="workout">
+          {% for workout in workouts %}
+            <option value="{{ workout['w_name'] }}">
+              {{ workout['w_name'] }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
     </div>
+    <input class="button-primary" type="submit" value="Submit">
+  </form>
+</div>
 
+{% if script %}
+<div class="docs-section">
+  <h6 class="docs-header">Performance</h6>
+  {{ div | safe }}
+</div>
+{% else %}
+<div class="docs-section">
+  <h6 class="docs-header">{{ performance_message }}</h6>
+</div>
+{% endif %}
 
 {% endblock %}

@@ -52,21 +52,55 @@ def leaderboard():
 
     return render_template('leaderboard.jinja', women = women, men = men)
 
-@app.route('/performance') 
 #@app.route('/plot/<color>')
+@app.route('/performance')
 def performance():
 
+    users = get_users()
+    workouts = get_workouts()
+
+    if not request.args:
+        performance_message = 'No user selected'
+        return render_template(
+            'performance.jinja',
+            users=users,
+            workouts=workouts,
+            performance_message=performance_message
+        )
+
+    user = request.args.get('user')
+    workout = request.args.get('workout')
+    first_name = user.split()[0]
+    last_name = user.split()[1]
+
+
     ## Get query params from form / buttons
-    data = get_performance
+    scores, dates = get_performance(first_name, last_name, workout)
 
-    ## This is just a toy
-    plot = figure(plot_width=600, plot_height=500)
+    plot = figure(plot_width=600, plot_height=500, x_axis_type="datetime")
 
-    # add a line renderer
-    plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
-    script, div = embed.components(plot)
+    if scores and len(scores) > 1:
+        plot.line(dates, scores, line_width=2)
+    elif scores:
+        plot.circle(dates, scores)
 
-    return render_template('performance.jinja', script=script, div=div)
+    if scores:
+        script, div = embed.components(plot)
+        performance_message = ''
+    else:
+        script = None
+        div = None
+        performance_message = 'No performance data for %s with %s' % (first_name, workout)
+
+
+    return render_template(
+        'performance.jinja',
+        script=script,
+        div=div,
+        users=users,
+        workouts=workouts,
+        performance_message=performance_message
+    )
 
 
 # Example of adding new data to the database
