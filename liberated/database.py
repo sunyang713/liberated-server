@@ -1,4 +1,5 @@
 # This module is responsible for executing all database tasks and queries.
+from collections import defaultdict
 from flask import g
 from sqlalchemy import exc
 import pdb
@@ -13,6 +14,7 @@ def get_users():
     for user in cursor:
         users.append({
             'name': user['first_name'],
+            'last_name': user['last_name'],
             'email': user['email_addr'],
             'gender': user['gender'],
             'level': user['user_level']
@@ -38,21 +40,86 @@ def insert_user(first_name, last_name, email_addr, gender, user_level):
         )
     )
 
-def get_attends():    
-    cursor = g.conn.execute('SELECT * FROM attends')
-    attends = []
-    for item in cursor:
-        attends.append({
-            'first_name': item['first_name'],
-            'last_name': item['last_name'],
-            'start': item['start_time'],
-            'end': item['end_time'],
-            'class_type': item['class_type']
-        })
+def get_class_times(year, month):
+    """
+    Queries the database for all class times per day.
+    Returns an ordered dictionary { date: [timeA, timeB, timeC ]}
+    """
+    now = '%s-%s-01' % (year, month)
+    if month < 12:
+        next_month = '%s-%s-01' % (year, month + 1)
+    else:
+        next_month = '%s-%s-01' % (year + 1, 1)
+    cursor = g.conn.execute(
+        '''
+        SELECT start_time, end_time, class_type FROM classes
+        WHERE start_time >= %s
+        AND start_time < %s
+        ''',
+        (now, next_month)
+    )
+    classes = []
+    clsss = {}
+    for c in cursor:
+        classes.append(c['start_time'])
+        clsss[str(c['start_time'])] = {
+            'end_time': str(c['end_time']),
+            'class_type': str(c['class_type'])
+        }
+
+
+    dates_dict = defaultdict(list)
+    for cl in classes:
+        dates_dict[str(cl.date())].append(str(cl.time()))
 
     cursor.close()
+    return dates_dict, clsss
 
-    return attends
+
+def get_attendance_sheet(class_time):
+    """
+    Queries the database for the attendees of a given class.
+    Returns a list of the names of the attendees.
+    """
+    if class_time is None:
+        return None
+
+    cursor = g.conn.execute(
+        '''
+        SELECT u.first_name
+        FROM users u, attends a
+        WHERE start_time = %s
+        AND u.first_name = a.first_name
+        AND u.last_name = a.last_name;
+        ''',
+        class_time
+    )
+    attendees = []
+    for attendee in cursor:
+        attendees.append(attendee['first_name'])
+    return attendees
+
+def record_user_attendance(first_name, last_name, start_time, end_time, class_type):
+    """
+    Mark a user as present at a given class_time
+    """
+    try:
+        cursor = g.conn.execute(
+            '''
+            INSERT INTO attends (first_name, last_name, start_time, end_time, class_type)
+                VALUES ('{first_name}', '{last_name}', '{start_time}', '{end_time}', '{class_type}');
+            '''
+            .format(
+                first_name=first_name,
+                last_name=last_name,
+                start_time=start_time,
+                end_time=end_time,
+                class_type=class_type
+            )
+        )
+    except:
+        pass
+
 
 def get_workouts():
     cursor = g.conn.execute('SELECT * FROM workouts')
@@ -136,8 +203,6 @@ def get_performance(first_name, last_name, w_name):
         print item
 
     #### need to finish
-
-    
 
 
 

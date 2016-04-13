@@ -48,7 +48,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y python-dev
     sudo apt-get install -y python-pip
     sudo apt-get install -y libpq-dev
-    sudo pip install -r /vagrant/requirements.txt
+    sudo pip install --upgrade --requirement /vagrant/requirements.txt
     echo "Provisioning complete."
   SHELL
 end

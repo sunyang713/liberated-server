@@ -1,5 +1,5 @@
 import os
-from flask import Flask, g, Response
+from flask import Flask, g, Response, abort
 from liberated.configure_engine import configure_engine
 from make_json_app import make_json_app
 
@@ -20,16 +20,17 @@ def before_request():
         print "uh oh, problem connecting to database"
         import traceback; traceback.print_exc()
         g.conn = None
+        abort(500)
+
 
 @app.teardown_request
 def teardown_request(exception):
     """
     Close the database connection at the end of the request.
     """
-    try:
-        g.conn.close()
-    except Exception as e:
-        pass
+    db = getattr(g, 'conn', None)
+    if db is not None:
+        db.close()
 
 # Import route responses.
 import liberated.responses
