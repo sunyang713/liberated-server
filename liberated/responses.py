@@ -52,7 +52,7 @@ def leaderboard():
 
     return render_template('leaderboard.jinja', women = women, men = men)
 
-@app.route('/performance') 
+@app.route('/performance')
 #@app.route('/plot/<color>')
 def performance():
     pdb.set_trace()
