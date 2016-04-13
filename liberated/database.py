@@ -202,6 +202,7 @@ def get_performance(first_name, last_name, w_name):
         WHERE first_name = %s
             AND last_name = %s
             AND w_name = %s
+        ORDER BY w_date ASC
         ''',
         (first_name, last_name, w_name)
     )
