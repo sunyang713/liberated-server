@@ -3,11 +3,10 @@ from flask import Response, abort, g, redirect, render_template, request
 
 from liberated import app
 from calendars import HTML_Calendar, AttendanceCalendar
-from database import get_users, insert_user, get_workouts, get_class_times, insert_workout, get_leaderboard, get_performance, get_attendance_sheet, record_user_attendance
+from database import *
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 from bokeh import embed
-import pdb
 
 
 @app.route('/')
@@ -194,7 +193,14 @@ def users_attend(class_time):
         )
     return redirect('/attendance/' + class_time)
 
-
+@app.route('/add_performance', methods=['GET', 'POST'])
+def add_performance():
+    data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
+    if not data:
+        return render_template('add_performance.jinja')
+    else:
+        insert_performance(**data)
+        return render_template('add_performance.jinja')
 
 @app.route('/login')
 def login():

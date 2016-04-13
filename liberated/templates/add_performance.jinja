@@ -1,0 +1,33 @@
+{% extends "base.jinja" %}
+{% block content %}
+
+<div class="docs-section">
+  <h6 class="docs-header">Add a Performance</h6>
+  <form action="/add_performance" method="POST">
+    <div class="row">
+      <div class="six columns">
+        <label for="first_name">First Name:</label>
+        <input class="u-full-width" type="text" id="first_name" name="first_name" />
+      </div>
+      <div class="six columns">
+        <label for="last_name">Last Name:</label>
+        <input class="u-full-width" type="text" id="last_name" name="last_name" />
+      </div>
+    </div>
+    <label for="w_name">Workout Name</label>
+    <input class="u-full-width" type="text" id="w_name" name="w_name" />
+    <div class="row">
+      <div class="six columns">
+        <label for="score">Score:</label>
+        <input class="u-full-width" type="text" id="score" name="score" />
+      </div>
+      <div class="six columns">
+        <label for="w_date">Workout Date</label>
+        <input class="u-full-width" type="text" id="w_date" name="w_date">
+      </div>
+    </div>
+    <input class="button-primary" type="submit" value="Submit">
+  </form>
+</div>
+
+{% endblock %}
