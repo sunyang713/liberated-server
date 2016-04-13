@@ -12,7 +12,7 @@ UNI to identify our database:
 	jys2124
 
 The URL of your web application:
-	http://<IP ADDRESS>:8111/
+	http://40.114.90.102:8111/
 
 
 Overview:
