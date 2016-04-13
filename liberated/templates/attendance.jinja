@@ -1,9 +1,12 @@
 {% extends "base.jinja" %}
 {% block content %}
 
-  <div>
-    {{ calendar }}
-  </div>
+<div class="docs-section center">
+  <h4>Attendance</h6>
+  <a class="button" href="{{ prev_month_url }}"><</a>
+  <a class="button" href="{{ next_month_url }}">></a>
+  {{ calendar }}
+</div>
 
 {% if class_time %}
 <div class="docs-section">
@@ -20,6 +23,5 @@
   </table>
 </div>
 {% endif %}
-    {{ attendance_sheet }}
 
 {% endblock %}

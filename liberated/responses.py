@@ -53,7 +53,8 @@ def attendance(class_time):
         year = d.year
         month = d.month
         day = d.day
-        time = None
+        time = '00:00:00'
+        class_time = '%d-%d-%d ' % (year, month, day) + time
     else:
         x = datetime.strptime(class_time, '%Y-%m-%d %H:%M:%S')
         d = x.date()
@@ -64,11 +65,21 @@ def attendance(class_time):
     class_times = get_class_times(year, month)
     attendance_sheet = get_attendance_sheet(class_time)
     calendar = AttendanceCalendar(class_times, year, month, 6) # specify first weekday; 6 corresponds to Sunday.
+    if month is 1:
+        prev_month_url = '/attendance/%d-%d-%d ' % (year - 1, 12, day) + str(time)
+    else:
+        prev_month_url = '/attendance/%d-%d-%d ' % (year, month - 1, day) + str(time)
+    if month is 12:
+        next_month_url = '/attendance/%d-%d-%d ' % (1, 1, day) + str(time)
+    else:
+        next_month_url = '/attendance/%d-%d-%d ' % (year, month + 1, day) + str(time)
     return render_template(
         'attendance.jinja',
         class_time=class_time,
         calendar=calendar.formatmonth(year, month),
-        attendance_sheet=attendance_sheet
+        attendance_sheet=attendance_sheet,
+        prev_month_url=prev_month_url,
+        next_month_url=next_month_url,
     )
 
 

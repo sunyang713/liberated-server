@@ -42,13 +42,18 @@ def get_class_times(year, month):
     Queries the database for all class times per day.
     Returns an ordered dictionary { date: [timeA, timeB, timeC ]}
     """
+    now = '%s-%s-01' % (year, month)
+    if month < 12:
+        next_month = '%s-%s-01' % (year, month + 1)
+    else:
+        next_month = '%s-%s-01' % (year + 1, 1)
     cursor = g.conn.execute(
         '''
         SELECT start_time FROM classes
-        WHERE start_time >= '2016-%s-01'
-        AND start_time < '2016-%s-01'
+        WHERE start_time >= %s
+        AND start_time < %s
         ''',
-        (month, month + 1)
+        (now, next_month)
     )
     classes = []
     for c in cursor:
