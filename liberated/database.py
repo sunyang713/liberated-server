@@ -193,14 +193,24 @@ def get_leaderboard(test_period):
     return women, men
 
 def get_performance(first_name, last_name, w_name):
+
     cursor = g.conn.execute (
         """
         select * from performs
         where first_name = %s and last_name = %s
-        and w_name = %s """ (first_name, last_name, w_name))
+        and w_name = %s """, (first_name, last_name, w_name))
 
-    for item in cursor:
-        print item
+
+    score = []
+    date = []
+    for werk in cursor:
+        print werk
+        score.append(werk['score'])
+        date.append(werk['w_date'])
+
+    cursor.close()
+
+    return score, date
 
     #### need to finish
 

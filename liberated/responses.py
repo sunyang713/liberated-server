@@ -55,19 +55,18 @@ def leaderboard():
 @app.route('/performance') 
 #@app.route('/plot/<color>')
 def performance():
-
+    pdb.set_trace()
     ## Get query params from form / buttons
-    data = get_performance
+    scores, dates = get_performance("Bill", "Roberts", "Deadlift")
 
     ## This is just a toy
-    plot = figure(plot_width=600, plot_height=500)
-
+    plot = figure(plot_width=600, plot_height=500, x_axis_type="datetime")
+    pdb.set_trace()
     # add a line renderer
-    plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
-    script, div = embed.components(plot)
-    print script
-    print div
+    ##plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    plot.circle(dates, scores, line_width=2)
 
+    script, div = embed.components(plot)
     return render_template('performance.jinja', script=script, div=div)
 
 
