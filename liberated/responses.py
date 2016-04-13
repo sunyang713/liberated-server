@@ -68,11 +68,13 @@ def performance(user, workout):
     ## This is just a toy
     plot = figure(plot_width=600, plot_height=500, x_axis_type="datetime")
     # add a line renderer
+
     ##plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
     plot.circle(dates, scores, line_width=2)
 
     users = get_users()
     workouts = get_workouts()
+
 
     script, div = embed.components(plot)
     return render_template(

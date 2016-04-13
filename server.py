@@ -12,7 +12,7 @@ To run locally:
 
     python server.py
 
-Go to http://localhost:4111 in your browser.
+Go to http://localhost:8111 in your browser.
 
 A debugger such as 'pdb' may be helpful for debugging.
 Read about it online.
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     @click.option('--debug', is_flag=True)
     @click.option('--threaded', is_flag=True)
     @click.argument('HOST', default='0.0.0.0')
-    @click.argument('PORT', default=4111, type=int)
+    @click.argument('PORT', default=8111, type=int)
     def serve(debug, threaded, host, port):
         """
         Run the server using:
