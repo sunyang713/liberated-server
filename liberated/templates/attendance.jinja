@@ -1,0 +1,25 @@
+{% extends "base.jinja" %}
+{% block content %}
+
+  <div>
+    {{ calendar }}
+  </div>
+
+{% if class_time %}
+<div class="docs-section">
+  <h6 class="docs-header">Attendees for Class {{ class_time }}</h6>
+  <table class="u-full-width">
+    <tr>
+      <th>Name</th>
+    </tr>
+    {% for user in attendance_sheet %}
+      <tr>
+        <td>{{ user }}</td>
+      <tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+    {{ attendance_sheet }}
+
+{% endblock %}

@@ -1,5 +1,5 @@
 # This module is responsible for executing all database tasks and queries.
-
+from collections import defaultdict
 from flask import g
 
 def get_users():
@@ -36,4 +36,53 @@ def insert_user(first_name, last_name, email_addr, gender, user_level):
             user_level=user_level
         )
     )
+
+def get_class_times(year, month):
+    """
+    Queries the database for all class times per day.
+    Returns an ordered dictionary { date: [timeA, timeB, timeC ]}
+    """
+    cursor = g.conn.execute(
+        '''
+        SELECT start_time FROM classes
+        WHERE start_time >= '2016-%s-01'
+        AND start_time < '2016-%s-01'
+        ''',
+        (month, month + 1)
+    )
+    classes = []
+    for c in cursor:
+        classes.append(c['start_time'])
+
+    dates_dict = defaultdict(list)
+    for cl in classes:
+        dates_dict[str(cl.date())].append(str(cl.time()))
+
+    cursor.close()
+    return dates_dict
+
+
+def get_attendance_sheet(class_time):
+    """
+    Queries the database for the attendees of a given class.
+    Returns a list of the names of the attendees.
+    """
+    if class_time is None:
+        return None
+
+    cursor = g.conn.execute(
+        '''
+        SELECT u.first_name
+        FROM users u, attends a
+        WHERE start_time = %s
+        AND u.first_name = a.first_name
+        AND u.last_name = a.last_name;
+        ''',
+        class_time
+    )
+    attendees = []
+    for attendee in cursor:
+        attendees.append(attendee['first_name'])
+    return attendees
+
 

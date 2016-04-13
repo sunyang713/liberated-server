@@ -1,8 +1,8 @@
-from html_calendar import HTML_Calendar
-from datetime import date
+from datetime import date, datetime
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user
+from database import get_users, insert_user, get_class_times, get_attendance_sheet
 from liberated import app
+from calendars import HTML_Calendar, AttendanceCalendar
 
 @app.route('/')
 def index():
@@ -42,6 +42,34 @@ def add():
 def calendar(year, month, test):
     calendar = HTML_Calendar(6) # specify first weekday; 6 corresponds to Sunday.
     return render_template('calendar.jinja', calendar=calendar.formatmonth(year, month), test=test)
+
+
+
+@app.route('/attendance', defaults={'class_time': None})
+@app.route('/attendance/<class_time>')
+def attendance(class_time):
+    if class_time is None:
+        d = date.today()
+        year = d.year
+        month = d.month
+        day = d.day
+        time = None
+    else:
+        x = datetime.strptime(class_time, '%Y-%m-%d %H:%M:%S')
+        d = x.date()
+        time = x.time()
+        year = d.year
+        month = d.month
+        day = d.day
+    class_times = get_class_times(year, month)
+    attendance_sheet = get_attendance_sheet(class_time)
+    calendar = AttendanceCalendar(class_times, year, month, 6) # specify first weekday; 6 corresponds to Sunday.
+    return render_template(
+        'attendance.jinja',
+        class_time=class_time,
+        calendar=calendar.formatmonth(year, month),
+        attendance_sheet=attendance_sheet
+    )
 
 
 
