@@ -1,7 +1,7 @@
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user, get_attends, get_workouts, insert_workout
+from database import get_users, insert_user, get_attends, get_workouts, insert_workout, get_leaderboard
 from liberated import app
-# import pdb
+import pdb
 
 @app.route('/')
 def index():
@@ -19,12 +19,7 @@ def add_user():
     data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
     insert_user(**data)
     return redirect('/users')
-
-
-@app.route('/another')
-def another():
-    return render_template('another.html')
-
+    
 
 @app.route('/attends')
 def attends():
@@ -41,9 +36,21 @@ def workouts():
 @app.route('/add_workout', methods=['POST'])
 def add_workout():
     data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
-    print data
     insert_workout(**data)
     return redirect('/workouts')
+
+
+@app.route('/leaderboard', methods=['GET','POST'])
+def leaderboard():
+
+    data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
+    if not data:
+        women, men = get_leaderboard("2015-12-25 2016-02-01")
+    else:
+        women, men = get_leaderboard(**data)
+
+    return render_template('leaderboard.html', women = women, men = men)
+
 
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
