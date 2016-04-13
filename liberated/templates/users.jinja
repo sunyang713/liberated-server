@@ -1,28 +1,26 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 {% block content %}
 <div class="docs-section">
-  <h6 class="docs-header">Attends</h6>
+  <h6 class="docs-header">Users</h6>
   <table class="u-full-width">
     <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
- <th>Start time</th>
-      <th>End time</th>
-      <th>Class type</th>
+      <th>Name</th>
+      <th>E-mail</th>
+      <th>Gender</th>
+      <th>Level</th>
     </tr>
-    {% for attend in attends %}
+    {% for user in users %}
       <tr>
-        <td>{{ attend['first_name'] }}</td>
-        <td>{{ attend['last_name'] }}</td>
-   <td>{{ attend['start'] }}</td>
-        <td>{{ attend['end'] }}</td>
-        <td>{{ attend['class_type'] }}</td>
+        <td>{{ user['name'] }}</td>
+        <td>{{ user['email'] }}</td>
+        <td>{{ user['gender'] }}</td>
+        <td>{{ user['level'] }}</td>
       <tr>
     {% endfor %}
   </table>
 </div>
 
-<!-- <div class="docs-section">
+<div class="docs-section">
   <h6 class="docs-header">Add a User</h6>
   <form action="/add_user" method="POST">
     <div class="row">
@@ -56,4 +54,4 @@
     <input class="button-primary" type="submit" value="Submit">
   </form>
 </div>
-{% endblock %} -->
+{% endblock %}

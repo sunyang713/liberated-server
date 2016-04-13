@@ -1,3 +1,5 @@
+from calendar import Calendar
+from datetime import date
 from flask import Response, abort, g, redirect, render_template, request
 from database import get_users, insert_user, get_attends, get_workouts, insert_workout, get_leaderboard, get_performance
 from liberated import app
@@ -8,13 +10,13 @@ import pdb
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 
 @app.route('/users')
 def users():
     users = get_users()
-    return render_template('users.html', users = users)
+    return render_template('users.jinja', users = users)
 
 
 @app.route('/add_user', methods=['POST'])
@@ -27,13 +29,12 @@ def add_user():
 @app.route('/attends')
 def attends():
     attends = get_attends()
-    return render_template('attends.html', attends = attends)
-
+    return render_template('attends.jinja', attends = attends)
 
 @app.route('/workouts')
 def workouts():
     workouts = get_workouts()
-    return render_template('workouts.html', workouts = workouts)
+    return render_template('workouts.jinja', workouts = workouts)
 
 
 @app.route('/add_workout', methods=['POST'])
@@ -52,7 +53,7 @@ def leaderboard():
     else:
         women, men = get_leaderboard(**data)
 
-    return render_template('leaderboard.html', women = women, men = men)
+    return render_template('leaderboard.jinja', women = women, men = men)
 
 @app.route('/performance') 
 #@app.route('/plot/<color>')
@@ -70,7 +71,7 @@ def performance():
     print script
     print div
 
-    return render_template('performance.html', script=script, div=div)
+    return render_template('performance.jinja', script=script, div=div)
 
 
 # Example of adding new data to the database

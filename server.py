@@ -22,7 +22,6 @@ import click
 from liberated import app
 
 if __name__ == '__main__':
-
     @click.command()
     @click.option('--debug', is_flag=True)
     @click.option('--threaded', is_flag=True)
@@ -30,7 +29,6 @@ if __name__ == '__main__':
     @click.argument('PORT', default=4111, type=int)
     def serve(debug, threaded, host, port):
         """
-        This function handles command line parameters.
         Run the server using:
 
             python server.py
@@ -40,9 +38,6 @@ if __name__ == '__main__':
             python server.py --help
 
         """
-
-        HOST, PORT = host, port
-        print 'running on %s:%d' % (HOST, PORT)
-        app.run(host=HOST, port=PORT, debug=debug, threaded=threaded)
+        app.run(host=host, port=port, debug=debug, threaded=threaded)
 
     serve()

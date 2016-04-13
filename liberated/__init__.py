@@ -1,20 +1,18 @@
 import os
 from flask import Flask, g, Response
-from sqlalchemy import *
-from sqlalchemy.pool import NullPool
 from liberated.configure_engine import configure_engine
 from make_json_app import make_json_app
 
-
+# Instantiate the application.
 app = make_json_app(__name__.split('.')[0])
-engine = configure_engine()
 
+# Instantiate the database 'engine.'
+engine = configure_engine()
 
 @app.before_request
 def before_request():
     """
-    At the beginning of every web request, setup a database connection.
-    The variable g is globally accessible.
+    Setup a database connection at the beginning of every request.
     """
     try:
         g.conn = engine.connect()
@@ -23,17 +21,15 @@ def before_request():
         import traceback; traceback.print_exc()
         g.conn = None
 
-
 @app.teardown_request
 def teardown_request(exception):
     """
-    At the end of the web request, close the database connection so that
-    the database won't run out of memory.
+    Close the database connection at the end of the request.
     """
     try:
         g.conn.close()
     except Exception as e:
         pass
 
-
+# Import route responses.
 import liberated.responses
