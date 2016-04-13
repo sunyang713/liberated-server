@@ -218,5 +218,22 @@ def get_performance(first_name, last_name, w_name):
 
     return score, date
 
+def insert_performance(first_name, last_name, w_name, w_date, score):
+    # Check for empty string parameters and make null if empty
+    if not score:
+        score = 0
+
+    try: 
+        cursor = g.conn.execute(
+            """
+            INSERT INTO performs (first_name, last_name, w_name, w_date, score)
+                VALUES (%s, %s, %s, %s, %s) """, 
+                (first_name, last_name, w_name, w_date, score))
+        
+        cursor.close()
+
+    except exc.SQLAlchemyError:
+        pass
+
 
 
