@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from flask import Response, abort, g, redirect, render_template, request
+import numpy as np
 
 from liberated import app
 from calendars import HTML_Calendar, AttendanceCalendar
@@ -53,27 +54,34 @@ def leaderboard():
     return render_template('leaderboard.jinja', women = women, men = men)
 
 #@app.route('/plot/<color>')
-@app.route('/performance', defaults={'user': None, 'workout': None})
-@app.route('/performance/<user>/<workout>')
-def performance(user, workout):
-
-    print user
-    print workout
-
-
-
-    ## Get query params from form / buttons
-    scores, dates = get_performance("Bill", "Roberts", "Deadlift")
-
-    ## This is just a toy
-    plot = figure(plot_width=600, plot_height=500, x_axis_type="datetime")
-    # add a line renderer
-
-    ##plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
-    plot.circle(dates, scores, line_width=2)
+@app.route('/performance')
+def performance():
 
     users = get_users()
     workouts = get_workouts()
+
+    if not request.args:
+        return render_template(
+            'performance.jinja',
+            users=users,
+            workouts=workouts
+        )
+
+    user = request.args.get('user')
+    workout = request.args.get('workout')
+    first_name = user.split()[0]
+    last_name = user.split()[1]
+
+
+    ## Get query params from form / buttons
+    scores, dates = get_performance(first_name, last_name, workout)
+
+    dd = np.array(dates, dtype=np.datetime64)
+
+    print dd
+
+    plot = figure(plot_width=600, plot_height=500, x_axis_type="datetime")
+    plot.circle(dates, scores, line_width=2)
 
 
     script, div = embed.components(plot)

@@ -171,7 +171,9 @@ def get_leaderboard(test_period):
                 rank() over (partition by gender order by sum(test_score) desc)
         from t
         group by first_name, gender, last_name
-        """, (start, end))
+        """,
+        (start, end)
+    )
 
     women = []
     men = []
@@ -181,13 +183,13 @@ def get_leaderboard(test_period):
                 'rank': item['rank'],
                 'first_name': item['first_name'],
                 'last_name': item['last_name'],
-                    })
+            })
         elif item['gender'] == 'm':
             men.append({
                 'rank': item['rank'],
                 'first_name': item['first_name'],
                 'last_name': item['last_name'],
-                    })
+            })
     cursor.close()
 
     return women, men
@@ -195,10 +197,14 @@ def get_leaderboard(test_period):
 def get_performance(first_name, last_name, w_name):
 
     cursor = g.conn.execute (
-        """
-        select * from performs
-        where first_name = %s and last_name = %s
-        and w_name = %s """, (first_name, last_name, w_name))
+        '''
+        SELECT * FROM performs
+        WHERE first_name = %s
+            AND last_name = %s
+            AND w_name = %s
+        ''',
+        (first_name, last_name, w_name)
+    )
 
 
     score = []
@@ -206,13 +212,11 @@ def get_performance(first_name, last_name, w_name):
     for werk in cursor:
         print werk
         score.append(werk['score'])
-        date.append(werk['w_date'])
+        date.append(str(werk['w_date']))
 
     cursor.close()
 
     return score, date
-
-    #### need to finish
 
 
 
