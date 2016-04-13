@@ -12,6 +12,7 @@ def get_users():
     for user in cursor:
         users.append({
             'name': user['first_name'],
+            'last_name': user['last_name'],
             'email': user['email_addr'],
             'gender': user['gender'],
             'level': user['user_level']
@@ -49,22 +50,28 @@ def get_class_times(year, month):
         next_month = '%s-%s-01' % (year + 1, 1)
     cursor = g.conn.execute(
         '''
-        SELECT start_time FROM classes
+        SELECT start_time, end_time, class_type FROM classes
         WHERE start_time >= %s
         AND start_time < %s
         ''',
         (now, next_month)
     )
     classes = []
+    clsss = {}
     for c in cursor:
         classes.append(c['start_time'])
+        clsss[str(c['start_time'])] = {
+            'end_time': str(c['end_time']),
+            'class_type': str(c['class_type'])
+        }
+
 
     dates_dict = defaultdict(list)
     for cl in classes:
         dates_dict[str(cl.date())].append(str(cl.time()))
 
     cursor.close()
-    return dates_dict
+    return dates_dict, clsss
 
 
 def get_attendance_sheet(class_time):
@@ -89,5 +96,27 @@ def get_attendance_sheet(class_time):
     for attendee in cursor:
         attendees.append(attendee['first_name'])
     return attendees
+
+def record_user_attendance(first_name, last_name, start_time, end_time, class_type):
+    """
+    Mark a user as present at a given class_time
+    """
+    try:
+        cursor = g.conn.execute(
+            '''
+            INSERT INTO attends (first_name, last_name, start_time, end_time, class_type)
+                VALUES ('{first_name}', '{last_name}', '{start_time}', '{end_time}', '{class_type}');
+            '''
+            .format(
+                first_name=first_name,
+                last_name=last_name,
+                start_time=start_time,
+                end_time=end_time,
+                class_type=class_type
+            )
+        )
+    except:
+        pass
+
 
 

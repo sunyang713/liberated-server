@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user, get_class_times, get_attendance_sheet
+from database import get_users, insert_user, get_class_times, get_attendance_sheet, record_user_attendance
 from liberated import app
 from calendars import HTML_Calendar, AttendanceCalendar
 
@@ -62,17 +62,29 @@ def attendance(class_time):
         year = d.year
         month = d.month
         day = d.day
-    class_times = get_class_times(year, month)
+
+    class_times, classes = get_class_times(year, month)
     attendance_sheet = get_attendance_sheet(class_time)
     calendar = AttendanceCalendar(class_times, year, month, 6) # specify first weekday; 6 corresponds to Sunday.
+
+
+    if class_time in classes:
+        end_time = classes[class_time]['end_time']
+        level = classes[class_time]['class_type']
+    else:
+        end_time = None
+        level = None
+
     if month is 1:
         prev_month_url = '/attendance/%d-%d-%d ' % (year - 1, 12, day) + str(time)
     else:
         prev_month_url = '/attendance/%d-%d-%d ' % (year, month - 1, day) + str(time)
     if month is 12:
-        next_month_url = '/attendance/%d-%d-%d ' % (1, 1, day) + str(time)
+        next_month_url = '/attendance/%d-%d-%d ' % (year + 1, 1, day) + str(time)
     else:
         next_month_url = '/attendance/%d-%d-%d ' % (year, month + 1, day) + str(time)
+
+    users = get_users()
     return render_template(
         'attendance.jinja',
         class_time=class_time,
@@ -80,7 +92,31 @@ def attendance(class_time):
         attendance_sheet=attendance_sheet,
         prev_month_url=prev_month_url,
         next_month_url=next_month_url,
+        users=users,
+        end_time=end_time, # specific to the current class
+        level=level, # specific to the current class
+        show_attendance=bool(level != None)
     )
+
+# Example of adding new data to the database
+@app.route('/users_attend/<class_time>', methods=['POST'])
+def users_attend(class_time):
+    for user in request.form:
+        tokens = user.split()
+        # hardcoded janky parameter shit
+        first_name = tokens[0]
+        last_name = tokens[1]
+        start_time = class_time
+        end_time = class_time.split()[0] + ' ' + tokens[3]
+        level = tokens[4]
+        record_user_attendance(
+            first_name,
+            last_name,
+            start_time,
+            end_time,
+            level
+        )
+    return redirect('/attendance/' + class_time)
 
 
 

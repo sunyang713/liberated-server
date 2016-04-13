@@ -8,20 +8,44 @@
   {{ calendar }}
 </div>
 
-{% if class_time %}
-<div class="docs-section">
-  <h6 class="docs-header">Attendees for Class {{ class_time }}</h6>
-  <table class="u-full-width">
-    <tr>
-      <th>Name</th>
-    </tr>
-    {% for user in attendance_sheet %}
+{% if show_attendance %}
+<div class="row">
+  <div class="docs-section six columns">
+    <h6 class="docs-header">Attendees for Class {{ class_time }}</h6>
+    <table class="u-full-width">
       <tr>
-        <td>{{ user }}</td>
-      <tr>
-    {% endfor %}
-  </table>
+        <th>Name</th>
+      </tr>
+      {% for user in attendance_sheet %}
+        <tr>
+          <td>{{ user }}</td>
+        <tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="docs-section six columns">
+    <h6 class="docs-header">Attendance Sheet</h6>
+    <form action="/users_attend/{{ class_time }}" method="POST">
+      <table class="u-full-width">
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+        </tr>
+        {% for user in users %}
+          <tr>
+            <td>{{ user['name'] }}</td>
+            <td>
+              <!-- this is super janky super hardcoded, I'm so sorry. Basically the server will expect this exact order
+                    of these parameters in the form, and will split via the whitespaces T.T -->
+              <input type="checkbox" name="{{ user['name'] + ' ' + user['last_name'] + ' ' + end_time + ' ' + level }}">
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+      <input class="button-primary" type="submit" value="Record">
+    </form>
+  </div>
 </div>
 {% endif %}
-
 {% endblock %}
