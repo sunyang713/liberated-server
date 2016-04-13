@@ -21,10 +21,25 @@ Our original proposal was to design an application that will service two kinds o
 
 
 
-
-
-
 A description of the parts of your original proposal in Part 1 that you implemented, the parts you did not (which hopefully is nothing or something very small), and possibly new features that were not included in the proposal and that you implemented anyway. If you did not implement some part of the proposal in Part 1, explain why.
+
+Elements of our original proposal we implemented:
+- The class calendar
+- A view of past client attendance
+- Performance data entry and retreival
+- The Most Liberated leaderboard
+
+Elements we did not implement:
+- The coach/athlete distinction. This would be best implemented via user accounts, permissions, and logins. This was not required by the assignment. As such we did not implement the large aggregation in our diagram, which would require a coach to input a client's test scores.
+
+- A "dashboard view" of attendance data. We decided instead to implement a "dashboard" style, graph-based view of performance data. 
+
+Extra elements we implemented:
+- A dynamic graph of workout performance data using the Bokeh library.
+
+
+
+Briefly describe two of the web pages that require (what you consider) the most interesting database operations in terms of what the pages are used for, how the page is related to the database operations (e.g., inputs on the page are used in such and such way to produce database operations that do such and such), and why you think they are interesting.
 
 In-depth look at two pages:
 
@@ -37,7 +52,7 @@ In-depth look at two pages:
 
 	Next to the attendance sheet is an attendance form listing all athletes. A Coach can mark any number of athletes as present and submit the form. This inserts those marked users to the 'attends' table appropriately. The page is refreshed and the new changes are reflected in the attendance sheet.
 
+	'Most Liberated'
+	This page consists of a form and two tables that show the results of the domain's competition to determine its "Most Liberated" athletes. The tables are populated with the male and female athletes ranked by their overall performance in the competition. 
 
-
-
-Briefly describe two of the web pages that require (what you consider) the most interesting database operations in terms of what the pages are used for, how the page is related to the database operations (e.g., inputs on the page are used in such and such way to produce database operations that do such and such), and why you think they are interesting.
+	The query groups scores by athlete name, sums the scores, and returns a ranked list based on the sum. This list is separated by gender and rendered into two tables. This method of computing the "Most Liberated" atheltes is a close approximation of the method employed in the domain. 
