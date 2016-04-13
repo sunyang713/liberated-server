@@ -199,10 +199,5 @@ def get_performance(first_name, last_name, w_name):
         where first_name = %s and last_name = %s
         and w_name = %s """ (first_name, last_name, w_name))
 
-    for item in cursor:
-        print item
-
-    #### need to finish
-
 
 

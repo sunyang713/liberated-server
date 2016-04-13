@@ -65,8 +65,6 @@ def performance():
     # add a line renderer
     plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
     script, div = embed.components(plot)
-    print script
-    print div
 
     return render_template('performance.jinja', script=script, div=div)
 
