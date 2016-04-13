@@ -223,7 +223,12 @@
   .popover-item:first-child .popover-link:hover:after {
     border-bottom-color: #33C3F0; }
 }
+<<<<<<< HEAD
 
 .center {
+  text-align: center;
+}
+
+.my-ru {
   text-align: center;
 }

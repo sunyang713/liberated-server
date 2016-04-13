@@ -1,8 +1,14 @@
 from datetime import date, datetime
 from flask import Response, abort, g, redirect, render_template, request
-from database import get_users, insert_user, get_class_times, get_attendance_sheet, record_user_attendance
+
 from liberated import app
 from calendars import HTML_Calendar, AttendanceCalendar
+from database import get_users, insert_user, get_workouts, get_class_times, insert_workout, get_leaderboard, get_performance, get_attendance_sheet, record_user_attendance
+from bokeh.plotting import figure
+from bokeh.resources import CDN
+from bokeh import embed
+import pdb
+
 
 @app.route('/')
 def index():
@@ -20,11 +26,49 @@ def add_user():
     data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
     insert_user(**data)
     return redirect('/users')
+    
+
+@app.route('/workouts')
+def workouts():
+    workouts = get_workouts()
+    return render_template('workouts.jinja', workouts = workouts)
 
 
-@app.route('/another')
-def another():
-    return render_template('another.jinja')
+@app.route('/add_workout', methods=['POST'])
+def add_workout():
+    data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
+    insert_workout(**data)
+    return redirect('/workouts')
+
+
+@app.route('/leaderboard', methods=['GET','POST'])
+def leaderboard():
+
+    data = dict( (key, value[0]) for (key, value) in dict(request.form).items() )
+    if not data:
+        women, men = get_leaderboard("2015-12-25 2016-02-01")
+    else:
+        women, men = get_leaderboard(**data)
+
+    return render_template('leaderboard.jinja', women = women, men = men)
+
+@app.route('/performance') 
+#@app.route('/plot/<color>')
+def performance():
+
+    ## Get query params from form / buttons
+    data = get_performance
+
+    ## This is just a toy
+    plot = figure(plot_width=600, plot_height=500)
+
+    # add a line renderer
+    plot.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    script, div = embed.components(plot)
+    print script
+    print div
+
+    return render_template('performance.jinja', script=script, div=div)
 
 
 # Example of adding new data to the database
