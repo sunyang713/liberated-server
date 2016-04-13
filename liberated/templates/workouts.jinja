@@ -1,0 +1,58 @@
+{% extends "base.jinja" %}
+{% block content %}
+<div class="docs-section">
+  <h6 class="docs-header">Existing Workouts</h6>
+  <table class="u-full-width">
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Rx Men</th>
+      <th>Rx Women</th>
+      <th>Level</th>
+    </tr>
+    {% for workout in workouts %}
+      <tr>
+        <td>{{ workout['w_name'] }}</td>
+        <td>{{ workout['description'] }}</td>
+        <td>{{ workout['rx_male'] }}</td>
+        <td>{{ workout['rx_female'] }}</td>
+        <td>{{ workout['level'] }}</td>
+      <tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="docs-section">
+  <h6 class="docs-header">Create a Workout</h6>
+  <form action="/add_workout" method="POST">
+    <div class="row">
+      <div class="five columns">
+        <label for="w_name">Workout Name:</label>
+        <input class="u-full-width" type="text" placeholder="Cindy" id="w_name" name="w_name" />
+      </div>
+      <div class="five columns">
+        <label for="description">Description:</label>
+        <input class="u-full-width" type="text" placeholder="20 minute AMRAP " id="description" name="description" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="five columns">
+        <label for="rx_male">Rx Male:</label>
+        <input class="u-full-width" type="text" id="rx_male" name="rx_male" />
+      </div>
+      <div class="five columns">
+        <label for="rx_female">Rx_female:</label>
+        <input class="u-full-width" type="text" id="rx_female" name="rx_female" />
+      </div>
+      <div class="five columns">
+        <label for="level">Level:</label>
+        <select class="u-full-width" id="level" name="level" />
+        <option value="1" selected>One</option>
+        <option value="2">Two</option>
+      </select>
+      </div>
+    </div>
+    <input class="button-primary" type="submit" value="Submit">
+  </form>
+</div>
+{% endblock %}
