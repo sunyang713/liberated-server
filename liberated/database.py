@@ -26,19 +26,22 @@ def insert_user(first_name, last_name, email_addr, gender, user_level):
     """
     Insert the parameters as a 'user' into the database.
     """
-    cursor = g.conn.execute(
-        '''
-        INSERT INTO users (first_name, last_name, email_addr, gender, user_level)
-            VALUES (%s, %s, %s, %s, %s);
-        ''',
-        (
-            first_name,
-            last_name,
-            email_addr,
-            gender,
-            user_level
+    try:
+        cursor = g.conn.execute(
+            '''
+            INSERT INTO users (first_name, last_name, email_addr, gender, user_level)
+                VALUES (%s, %s, %s, %s, %s);
+            ''',
+            (
+                first_name,
+                last_name,
+                email_addr,
+                gender,
+                user_level
+            )
         )
-    )
+    except exc.SQLAlchemyError:
+        pass
 
 def get_class_times(year, month):
     """
